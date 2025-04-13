@@ -4,7 +4,11 @@ services:
   eduvix:
     build: .
     container_name: eduvix_server
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn eduvix.wsgi:application --bind 0.0.0.0:8000"
+    command: >
+      bash -c "python manage.py makemigrations &&
+               python manage.py migrate &&
+               python manage.py collectstatic --noinput &&
+               gunicorn eduvix.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - "8000:8000"
     environment:
@@ -29,7 +33,7 @@ services:
       - ./db_data:/var/lib/postgresql/data
     networks:
       - eduvix_network
-  
+
   certbot:
     image: certbot/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
@@ -38,7 +42,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - eduvix_network
-  
+
   nginx:
     image: nginx:latest
     container_name: eduvix_nginx
@@ -46,7 +50,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx.conf:/etc/nginx/nginx.conf
       - ./certs:/etc/letsencrypt
       - ./static:/app/static
     depends_on:
