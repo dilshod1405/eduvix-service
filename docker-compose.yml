@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  eduvix:
+    build: .
+    container_name: eduvix_server
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn eduvix.wsgi:application --bind 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=eduvix.settings
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    networks:
+      - eduvix_network
+
+  db:
+    image: postgres:17.2-alpine
+    container_name: eduvix_db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    networks:
+      - eduvix_network
+  
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - eduvix_network
+  
+  nginx:
+    image: nginx:latest
+    container_name: eduvix_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./certs:/etc/letsencrypt
+      - ./static:/app/static
+    depends_on:
+      - eduvix
+    networks:
+      - eduvix_network
+
+networks:
+  eduvix_network:
+    driver: bridge
