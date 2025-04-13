@@ -5,8 +5,10 @@ services:
     build: .
     container_name: eduvix_server
     command: >
-      bash -c "python manage.py makemigrations &&
-               python manage.py migrate &&
+      bash -c "python manage.py makemigrations authentication &&
+               python manage.py makemigrations content &&
+               python manage.py makemigrations payment &&
+               python manage.py migrate authentication content payment &&
                python manage.py collectstatic --noinput &&
                gunicorn eduvix.wsgi:application --bind 0.0.0.0:8000"
     ports:
