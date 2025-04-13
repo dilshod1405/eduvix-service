@@ -15,8 +15,6 @@ services:
       - DJANGO_SETTINGS_MODULE=eduvix.settings
     volumes:
       - .:/app
-    depends_on:
-      - db
     networks:
       - eduvix_network
 
