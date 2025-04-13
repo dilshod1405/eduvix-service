@@ -27,4 +27,4 @@ ENV PYTHONUNBUFFERED=1 \
 EXPOSE 8000
 
 # Command to run the application
-CMD ["bash", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn eduvix.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["bash", "-c", "python manage.py makemigrations authentication && python manage.py makemigrations content && python manage.py makemigrations payment && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn eduvix.wsgi:application --bind 0.0.0.0:8000"]
