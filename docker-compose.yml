@@ -4,6 +4,7 @@ services:
   eduvix:
     build: .
     container_name: eduvix_server
+    restart: unless-stopped
     command: >
       bash -c "python manage.py makemigrations authentication &&
                python manage.py makemigrations content &&
@@ -11,8 +12,7 @@ services:
                python manage.py migrate &&
                python manage.py collectstatic --noinput &&
                gunicorn eduvix.wsgi:application --bind 0.0.0.0:8000"
-    ports:
-      - "8000:8000"
+    ports: []
     environment:
       - DJANGO_SETTINGS_MODULE=eduvix.settings
     volumes:
@@ -26,6 +26,7 @@ services:
   db:
     image: postgres:17.2-alpine
     container_name: eduvix_db
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -38,6 +39,7 @@ services:
       - eduvix_network
 
   certbot:
+    restart: unless-stopped
     image: certbot/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     volumes:
@@ -48,6 +50,7 @@ services:
 
   nginx:
     image: nginx:latest
+    restart: unless-stopped
     container_name: eduvix_nginx
     ports:
       - "80:80"
