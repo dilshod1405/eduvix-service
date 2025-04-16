@@ -48,6 +48,7 @@ services:
     - ./certs:/etc/letsencrypt
     - ./certbot/www:/var/www/certbot
     - ./static:/app/static
+    - ./staticfiles:/app/staticfiles
     networks:
       - eduvix_network
 
@@ -64,6 +65,7 @@ services:
     - ./certs:/etc/letsencrypt
     - ./certbot/www:/var/www/certbot
     - ./static:/app/static
+    - ./staticfiles:/app/staticfiles
     - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - eduvix
