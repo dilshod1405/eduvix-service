@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Module, Speciality, Teacher, Category, Lesson, Homework, Resource
+from authentication.service.serializers import UserDetailSerializer
 
 class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,6 +10,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 
 # Teacher serializer
 class TeacherSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer()
     class Meta:
         model = Teacher
         fields = '__all__'
