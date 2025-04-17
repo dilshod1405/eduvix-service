@@ -5,7 +5,7 @@ from authentication.service.serializers import UserDetailSerializer
 class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
-        fields = ['id','speciality', 'price']
+        fields = ['id','speciality', 'price', 'name', 'description']
 
 
 # Teacher serializer
