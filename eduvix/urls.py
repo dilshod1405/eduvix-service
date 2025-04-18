@@ -18,12 +18,12 @@ schema_view = get_schema_view(
         description="This is a documentation for EduVix online learning platform service API",
         contact=openapi.Contact("dilshod.normurodov1392@gmail.com", "dil-shod.uz"),
     ),
-    public=True,
-    permission_classes=[permissions.IsAuthenticatedOrReadOnly,],
+    public=False,
+    permission_classes=[permissions.IsAuthenticated,],
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('panel-control/', admin.site.urls),
     path('authentication/', include('authentication.urls')),
     path('payment/', include('payment.urls')),
     path('content/', include('content.urls')),

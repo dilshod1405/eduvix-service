@@ -3,19 +3,20 @@ from .models import Teacher, Category, Speciality, Module, Lesson, Homework, Res
 
 @admin.register(Speciality)
 class SpecialityAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'teacher', 'category', 'for_who', 'requirements', 'what_will_you_learn', 'duration')
+    list_display = ('name', 'description', 'teacher', 'category', 'for_who', 'requirements', 'what_will_you_learn', 'duration', 'id')
     search_fields = ('name',)
     list_filter = ('teacher', 'category')
     ordering = ('name',)
+    list_editable = ('description', 'for_who', 'requirements', 'what_will_you_learn', 'duration',)
 
 
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ('name', 'speciality', 'price', 'description')
+    list_display = ('name', 'speciality', 'price', 'description', 'id')
     search_fields = ('name',)
     list_filter = ('speciality',)
     ordering = ('name',)
-    list_editable = ('price',)
+    list_editable = ('price', 'description',)
     
 
 @admin.register(Teacher)
@@ -38,7 +39,7 @@ class LessonAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('module',)
     ordering = ('id',)
-    list_editable = ('description',)
+    list_editable = ('description', 'source',)
     
 @admin.register(Homework)
 class HomeworkAdmin(admin.ModelAdmin):
@@ -46,7 +47,7 @@ class HomeworkAdmin(admin.ModelAdmin):
     search_fields = ('lesson',)
     list_filter = ('lesson',)
     ordering = ('id',)
-    list_editable = ('description',)
+    list_editable = ('description', 'source',)
     
 
 @admin.register(Resource)
