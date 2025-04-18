@@ -2,6 +2,7 @@ from rest_framework import serializers
 from authentication.models import User
 from authentication.service.send_verification_email import send_verification_email
 from authentication.service.send_update_profile_email import send_update_profile_email
+from authentication.service.send_failed_update_profile_email import send_failed_update_profile_email
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode
@@ -70,7 +71,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         instance.is_verified = validated_data.get('is_verified', instance.is_verified)
         instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.save()
-        send_update_profile_email(instance)
+        if instance.is_verified:
+            send_update_profile_email(instance)
+        else:
+            send_failed_update_profile_email(instance)
+            raise serializers.ValidationError("Failed to update user profile.")
         return instance
     
 
