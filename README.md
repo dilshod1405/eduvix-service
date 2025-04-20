@@ -9,7 +9,8 @@ The platform offers professional courses in **Architecture, Civil Engineering, I
 
 - 🔒 User Authentication
 - 🎓 Course Management
-- 💳 Payment Integration
+- 💳 National Payme Payment Provider Integration
+- ✉️ Google Email notification Integration
 - 🌐 RESTful API Endpoints
 - 🐳 Dockerized for easy deployment
 
@@ -56,10 +57,25 @@ cd edvent-service
 2. **Create a `.env` file** in the project root:
 
 ```bash
-DEBUG=True
 SECRET_KEY=your_secret_key
-ALLOWED_HOSTS=localhost,127.0.0.1
-DATABASE_URL=postgres://user:password@db:5432/edvent_db
+DB_NAME=database_name
+DB_USER=database_user
+DB_PASSWORD=database_password
+DB_HOST=database_host
+DB_PORT=database_host
+DEBUG=False
+ALLOWED_HOSTS=your allowed hosts
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST_USER=youremail@gmail.com
+EMAIL_HOST_PASSWORD=Google SMTP password
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+CSRF_TRUSTED_ORIGINS=http://localhost:3000
+CORS_ALLOW_CREDENTIALS=True
+SERVER_NAME=http://localhost:8000
+SUCCESSFUL_CODE_URL=redirect url after email confirmation
+PAYME_ID=payme_id
+PAYME_KEY=payme_key
 ```
 
 3. **Build and run using Docker:**
@@ -68,17 +84,10 @@ DATABASE_URL=postgres://user:password@db:5432/edvent_db
 docker-compose up --build
 ```
 
-4. **Run migrations & create a superuser:**
+4. **Access your app locally:**
 
-```bash
-docker-compose exec web python manage.py migrate
-docker-compose exec web python manage.py createsuperuser
-```
-
-5. **Access your app locally:**
-
-- API Base URL: `http://localhost:8000/api/`
-- Admin Panel: `http://localhost:8000/admin/`
+- API Base URL: `http://localhost:8000/authentication/` for users entrypoints
+- Admin Panel: `http://localhost:8000/admin/` for admin panel. You can change this url in production deployment
 
 ---
 
@@ -97,7 +106,8 @@ docker-compose exec web python manage.py test
 If enabled, your Swagger / DRF-generated API docs will be available at:
 
 ```
-http://localhost:8000/api/docs/
+http://localhost:8000/docs/ for swagger API documentation
+http://localhost:8000/redoc/ for redoc API documentation
 ```
 
 ---
@@ -108,28 +118,13 @@ http://localhost:8000/api/docs/
 - Use Docker Compose on your production server as well:
 
 ```bash
-docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose docker-compose up -d --build
 ```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!  
-Fork the repo, create a feature branch, push your changes and submit a Pull Request.
-
----
 
 ## 📬 Contact
 
 - 📧 Email: [dilshod.normurodov1392@gmail.com](mailto:dilshod.normurodov1392@gmail.com)
 - 💬 Telegram: [@dilshod1405](https://t.me/dilshod1405)
-
----
-
-## 📄 License
-
-MIT License — feel free to use, distribute, and modify.
 
 ---
 
@@ -160,6 +155,3 @@ Repository link: [https://github.com/dilshod1405/edvent](https://github.com/dils
 ![Google Login](https://media-hosting.imagekit.io/fb15f6382fc3479b/Google.png?Expires=1839665644&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=hG2WUg62Vp9VY6KBv84bBaLFJ5oqcgmP3HNvFx0E~0G5F5IdapUpp5HqXzfv-gVdtsgNjDph0hjxYxcAqDalLVBOf2i0r3SGyNSdR7ZnTNFqCMI4Ti6NQExOBuX9nvrbpSKTfvI5ivlSmMLvRZc8xk2aP3WQ8iILPqhhRwSkGsnrpSKq4abA~UKEF5LCFqndC9jBrs8ute-Mihc7ao5EQb26QSsrQcX0j1mc6dvm4f4w14C6X16rXUsKC7Ek2RIUAvSpnBsAxqb09tPRSK9ju-6TCBkA19J1~T94p6jORAE0uqwkburxf7mWjLsC0IeuIC3qb0R-l-5cNJIlbdJtWg__)
 
 ---
-
-✅ Now your frontend and backend both are documented clearly! Let me know if you want me to also prepare a `docker-compose.yml` explanation or deployment guide!
-
